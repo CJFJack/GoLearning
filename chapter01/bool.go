@@ -25,6 +25,4 @@ func main() {
 	fmt.Println(isGirl == isBoy)
 	fmt.Println(isGirl != isBoy)
 
-
-
 }
