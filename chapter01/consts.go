@@ -10,7 +10,7 @@ func main() {
 	)
 	fmt.Println(C1, C2, C3)
 
-	a := 1
+	a := "asdf"
 	{
 		fmt.Println(a)
 		b := 2
@@ -20,5 +20,5 @@ func main() {
 			fmt.Println(a)
 		}
 	}
-	fmt.Printf("%T, %d", a, a)
+	fmt.Printf("%T, %v", a, a)
 }

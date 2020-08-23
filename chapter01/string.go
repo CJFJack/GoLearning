@@ -10,4 +10,6 @@ func main() {
 	fmt.Println("My name is " + name)
 	name += " hahaha"
 	fmt.Println(name + "xxx")
+
+	fmt.Println(name[1:2])
 }
