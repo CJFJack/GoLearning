@@ -16,6 +16,7 @@ func main() {
 	flag.BoolVar(&h, "h", false, "帮助")
 	flag.BoolVar(&help, "help", false, "帮助")
 
+	// 解释参数
 	flag.Parse()
 
 	if h || help {
@@ -25,6 +26,7 @@ func main() {
 	}
 
 	fmt.Println(host, port, h, help)
+	// 打印其他参数，返回切片
 	fmt.Println(flag.Args())
 
 }

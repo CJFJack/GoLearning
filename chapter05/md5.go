@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"time"
 )
 import "fmt"
 
@@ -17,7 +16,4 @@ func main() {
 	hasher.Write([]byte("Jack"))
 	fmt.Println(hex.EncodeToString(hasher.Sum(nil)))
 
-	fmt.Println(time.Unix(0, 0))
-	fmt.Println(time.Now().Unix())
-	fmt.Println(time.Now().UnixNano())
 }
