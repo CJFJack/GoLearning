@@ -1,7 +1,12 @@
 package main
 
 import (
+	"crypto/md5"
 	"fmt"
+	"github.com/howeyc/gopass"
+	"github.com/olekukonko/tablewriter"
+	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +15,11 @@ import (
 var (
 	toDoList = make([]map[string]string, 0)
 	text     string
+)
+
+const (
+	passSalt   string = "61info"
+	saltedPass string = "1284aff560103c123416967d2f3ac290"
 )
 
 func input(inputText string) string {
@@ -71,6 +81,26 @@ func query() {
 	}
 }
 
+func sortTask() {
+	sortTypeArray := [2]string{"name", "startTime"}
+	n := 0
+	sortType := input("请输入排序方式，name:按任务名称升序，time:按开始时间升序，否则按任务id升序：")
+	for _, value := range sortTypeArray {
+		if sortType == value {
+			sort.SliceStable(toDoList, func(i, j int) bool {
+				return toDoList[i][sortType] < toDoList[j][sortType]
+			})
+			n++
+		}
+	}
+	if n == 0 {
+		sort.SliceStable(toDoList, func(i, j int) bool {
+			return toDoList[i]["id"] < toDoList[j]["id"]
+		})
+	}
+	createTable()
+}
+
 func delToDoListTask(index int) {
 	copy(toDoList[index:], toDoList[index+1:])
 	toDoList = toDoList[:len(toDoList)-1]
@@ -114,6 +144,8 @@ func actionTransfer(action string) func() {
 		return del
 	case action == "modify":
 		return modify
+	case action == "sort":
+		return sortTask
 	default:
 		fmt.Println("指令不正确")
 		return func() {
@@ -122,9 +154,32 @@ func actionTransfer(action string) func() {
 	}
 }
 
+func calcSaltMd5(rawPass string) string {
+	md5Pass := fmt.Sprintf("%x", md5.Sum([]byte(rawPass+passSalt)))
+	return string(md5Pass)
+}
+
+func createTable() {
+	t := tablewriter.NewWriter(os.Stdout)
+	t.SetHeader([]string{"任务Id", "任务名称", "开始时间", "结束时间", "负责人", "状态"})
+	for _, toDoValue := range toDoList {
+		row := make([]string, 0)
+		row = append(row, toDoValue["id"], toDoValue["name"], toDoValue["startTime"], toDoValue["endTime"], toDoValue["user"], toDoValue["status"])
+		t.Append(row)
+	}
+	t.Render()
+}
+
 func main() {
+	fmt.Print("请输入密码：")
+	rawPass, _ := gopass.GetPasswd()
+	inputSaltedPass := calcSaltMd5(string(rawPass))
+	if inputSaltedPass != saltedPass {
+		fmt.Println("您输入的密码错误，退出")
+		return
+	}
 	for {
-		action := input("请输入query/add/modify/del/exit：")
+		action := input("请输入query/sort/add/modify/del/exit：")
 		if action == "exit" {
 			break
 		}

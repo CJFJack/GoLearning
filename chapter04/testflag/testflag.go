@@ -21,7 +21,7 @@ func main() {
 
 	if h || help {
 		fmt.Println("usage: testflag.exe [-H 127.0.0.1] [-P 3306]")
-		flag.PrintDefaults()
+		flag.Usage()
 		return
 	}
 
