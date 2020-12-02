@@ -8,6 +8,7 @@ func main() {
 
 	fmt.Println(a)
 	fmt.Println(b)
+	fmt.Println(*b)
 
 	// 通过指针地址修改值
 	*b = 20

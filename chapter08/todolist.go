@@ -9,6 +9,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"io"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -16,17 +17,18 @@ import (
 )
 
 type Tasks struct {
-	id        int
-	name      string
-	startTime string
-	user      string
-	endTime   string
-	status    string
+	Id        int
+	Name      string
+	StartTime string
+	User      string
+	EndTime   string
+	Status    string
 }
 
 var (
-	toDoList = make([]*Tasks, 0)
-	text     string
+	toDoList   = []*Tasks{}
+	text       string
+	jsonPrefix = "tasks.json."
 )
 
 const (
@@ -46,7 +48,7 @@ func genId() int {
 		return 1
 	} else {
 		for _, task := range toDoList {
-			id := task.id
+			id := task.Id
 			if id > maxId {
 				maxId = id
 			}
@@ -63,21 +65,21 @@ func add() {
 
 	id := genId()
 
-	task := &Tasks{id: id, name: name, startTime: startTime, user: user, status: "新创建"}
-	toDoList = append(toDoList, task)
+	task := Tasks{Id: id, Name: name, StartTime: startTime, User: user, Status: "新创建"}
+	toDoList = append(toDoList, &task)
 
 	jsonEncode(toDoList)
 
 }
 
-func printToDo(t Tasks) {
+func printToDo(t *Tasks) {
 	fmt.Println(strings.Repeat("-", 20))
-	fmt.Println("任务id：", t.id)
-	fmt.Println("任务名称：", t.name)
-	fmt.Println("开始时间：", t.startTime)
-	fmt.Println("结束时间：", t.endTime)
-	fmt.Println("负责人：", t.user)
-	fmt.Println("状态：", t.status)
+	fmt.Println("任务id：", t.Id)
+	fmt.Println("任务名称：", t.Name)
+	fmt.Println("开始时间：", t.StartTime)
+	fmt.Println("结束时间：", t.EndTime)
+	fmt.Println("负责人：", t.User)
+	fmt.Println("状态：", t.Status)
 	fmt.Println(strings.Repeat("-", 20))
 }
 
@@ -85,8 +87,8 @@ func query() {
 	name := input("请输入需要查询的任务名称，输入all则查询所有：")
 	n := 0
 	for _, task := range toDoList {
-		if task.name == name || name == "all" {
-			printToDo(*task)
+		if task.Name == name || name == "all" {
+			printToDo(task)
 			n++
 		}
 	}
@@ -103,9 +105,9 @@ func sortTask() {
 		if sortType == value {
 			sort.SliceStable(toDoList, func(i, j int) bool {
 				if sortType == "name" {
-					return toDoList[i].name < toDoList[j].name
+					return toDoList[i].Name < toDoList[j].Name
 				} else if sortType == "startTime" {
-					return toDoList[i].startTime < toDoList[j].startTime
+					return toDoList[i].StartTime < toDoList[j].StartTime
 				} else {
 					return true
 				}
@@ -115,7 +117,7 @@ func sortTask() {
 	}
 	if n == 0 {
 		sort.SliceStable(toDoList, func(i, j int) bool {
-			return toDoList[i].id < toDoList[j].id
+			return toDoList[i].Id < toDoList[j].Id
 		})
 	}
 	createTable()
@@ -129,11 +131,13 @@ func delToDoListTask(index int) {
 func del() {
 	name := input("请输入要删除的任务名称：")
 	for index, task := range toDoList {
-		if task.name == name {
+		if task.Name == name {
 			delToDoListTask(index)
 			break
 		}
 	}
+
+	jsonEncode(toDoList)
 }
 
 func modify() {
@@ -143,38 +147,58 @@ func modify() {
 	user := input("请输入负责人：")
 	status := input("请输入任务状态(新创建/进行中/已完成)：")
 	for _, task := range toDoList {
-		if task.name == name {
+		if task.Name == name {
 			fmt.Println(task)
-			task.startTime = startTime
+			task.StartTime = startTime
 			//task.endTime = endTime
-			task.user = user
-			task.status = status
+			task.User = user
+			task.Status = status
 			if status == "已完成" {
-				task.endTime = time.Now().Format("2006-01-02 15:04:05")
+				task.EndTime = time.Now().Format("2006-01-02 15:04:05")
 			}
 			break
 		}
 	}
+
+	jsonEncode(toDoList)
 }
 
 func actionTransfer(action string) func() {
-	switch {
-	case action == "add":
-		return add
-	case action == "query":
-		return query
-	case action == "del":
-		return del
-	case action == "modify":
-		return modify
-	case action == "sort":
-		return sortTask
-	default:
-		fmt.Println("指令不正确")
+	// 方法一
+	actionMap := map[string]func(){
+		"add":    add,
+		"query":  query,
+		"del":    del,
+		"modify": modify,
+		"sort":   sortTask,
+	}
+
+	if actionMap[action] == nil {
+		fmt.Println("指令不不正确")
 		return func() {
 
 		}
 	}
+	return actionMap[action]
+
+	// 方法二
+	//switch {
+	//case action == "add":
+	//	return add
+	//case action == "query":
+	//	return query
+	//case action == "del":
+	//	return del
+	//case action == "modify":
+	//	return modify
+	//case action == "sort":
+	//	return sortTask
+	//default:
+	//	fmt.Println("指令不正确")
+	//	return func() {
+	//
+	//	}
+	//}
 }
 
 func calcSaltMd5(rawPass string) string {
@@ -187,7 +211,7 @@ func createTable() {
 	t.SetHeader([]string{"任务Id", "任务名称", "开始时间", "结束时间", "负责人", "状态"})
 	for _, task := range toDoList {
 		row := make([]string, 0)
-		row = append(row, strconv.Itoa(task.id), task.name, task.startTime, task.endTime, task.user, task.status)
+		row = append(row, strconv.Itoa(task.Id), task.Name, task.StartTime, task.EndTime, task.User, task.Status)
 		t.Append(row)
 	}
 	t.Render()
@@ -233,14 +257,57 @@ func readPassFile() string {
 	return saltedPass
 }
 
+func MaxSuffixFileNameAndClearOldFile(prefix string, clear bool) (string, string) {
+	files, _ := filepath.Glob(prefix + "*")
+	maxSuffix := "0"
+	newSuffix := "0"
+	if len(files) > 0 {
+		sort.Strings(files)
+		fileSplit := strings.Split(files[len(files)-1], prefix)
+		maxSuffix = fileSplit[len(fileSplit)-1]
+		maxId, _ := strconv.Atoi(maxSuffix)
+		if clear && len(files) >= 3 {
+			for i := 0; i <= len(files)-3; i++ {
+				os.Remove(files[i])
+			}
+		}
+		newSuffix = strconv.Itoa(maxId + 1)
+	}
+	return maxSuffix, newSuffix
+}
+
+func CreateOrDeleteSaveFile(prefix string) string {
+	_, newSuffix := MaxSuffixFileNameAndClearOldFile(prefix, true)
+	return prefix + newSuffix
+}
+
 func jsonEncode(tasks []*Tasks) error {
-	file, err := os.OpenFile("tasks.json", os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
+	saveFile := CreateOrDeleteSaveFile(jsonPrefix)
+	file, err := os.OpenFile(saveFile, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		return err
 	}
+	defer file.Close()
+
 	writer := bufio.NewWriter(file)
+	defer writer.Flush()
+
 	encoder := json.NewEncoder(writer)
 	return encoder.Encode(tasks)
+}
+
+func jsonDecode(tasks *[]*Tasks) error {
+	maxSuffix, _ := MaxSuffixFileNameAndClearOldFile(jsonPrefix, false)
+	file, err := os.Open(jsonPrefix + maxSuffix)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+
+	decoder := json.NewDecoder(reader)
+	return decoder.Decode(tasks)
 }
 
 func main() {
@@ -269,6 +336,8 @@ func main() {
 			return
 		}
 	}
+
+	jsonDecode(&toDoList)
 
 	for {
 		action := input("请输入query/sort/add/modify/del/exit：")
