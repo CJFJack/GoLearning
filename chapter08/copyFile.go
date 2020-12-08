@@ -22,6 +22,7 @@ func copyFile(src, dst string) error {
 	defer dstFile.Close()
 
 	// 读取内容并写入内容
+	// 方式一
 	//ctx := make([]byte, 10)
 	//for {
 	//	n, err := srcFile.Read(ctx)
@@ -39,6 +40,7 @@ func copyFile(src, dst string) error {
 	//buffer := make([]byte, 1024)
 	//io.CopyBuffer(dstFile, srcFile, buffer)
 
+	// 方式二
 	io.CopyN(dstFile, srcFile, 3)
 
 	return err
