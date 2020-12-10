@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
+	"os"
 )
 
 const dateFormat = "2006-01-02 15:04:05"
@@ -21,9 +21,12 @@ func main() {
 	defer conn.Close()
 
 	reader := bufio.NewReader(conn)
-	for i := 0; i < 4; i++ {
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
 		// 向服务端发送数据
-		fmt.Fprintf(conn, "Time: %s\n", time.Now().Format(dateFormat))
+		fmt.Print("请输入消息：")
+		scanner.Scan()
+		fmt.Fprintf(conn, "%s\n", scanner.Text())
 		// 接收回复数据
 		line, _, err := reader.ReadLine()
 		if err != nil {
@@ -33,6 +36,5 @@ func main() {
 		// 接收到服务器端响应
 		log.Printf("接收到服务器端响应：%s", string(line))
 	}
-	fmt.Fprintln(conn, "quit")
 
 }

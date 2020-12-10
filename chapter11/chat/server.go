@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
+	"os"
 )
-
-const dateFormat = "2006-01-02 15:04:05"
 
 func main() {
 	addr := "127.0.0.1:6666"
@@ -21,18 +19,19 @@ func main() {
 	defer listener.Close()
 	log.Printf("listen on [%s]", addr)
 
-	// 循环接收
+	// 循环接收客户端连接
 	for {
 		// 接收客户端连接
 		conn, err := listener.Accept()
 		if err != nil {
 			continue
 		}
+		reader := bufio.NewReader(conn)
+		scanner := bufio.NewScanner(os.Stdin)
 		func() {
 			defer conn.Close()
 			log.Printf("client[%s] is connected...", conn.RemoteAddr())
 			// 读取客户端请求数据
-			reader := bufio.NewReader(conn)
 			for {
 				line, _, err := reader.ReadLine()
 				if err != nil {
@@ -43,8 +42,10 @@ func main() {
 						break
 					}
 					log.Printf("接收到数据：%s\n", string(line))
-					// 回复数据
-					fmt.Fprintf(conn, "Over：%s\n", time.Now().Format(dateFormat))
+					// 向客户端回复数据
+					fmt.Print("请输入消息：")
+					scanner.Scan()
+					fmt.Fprintf(conn, "%s\n", scanner.Text())
 				}
 			}
 		}()
