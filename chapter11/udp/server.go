@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 )
@@ -15,11 +16,15 @@ func main() {
 	log.Printf("listen on [%s]", addr)
 
 	for {
+		// 接收消息
 		ctx := make([]byte, 1024)
 		n, remoteAddr, err := packageListen.ReadFrom(ctx)
 		if err != nil {
 			log.Printf("read from %s err: %s", remoteAddr, err)
 		}
 		log.Printf("read from %s: %s", remoteAddr, string(ctx[:n]))
+		// 回复消息
+		n, err = packageListen.WriteTo([]byte("received msg ok"), remoteAddr)
+		fmt.Println(n, err)
 	}
 }
