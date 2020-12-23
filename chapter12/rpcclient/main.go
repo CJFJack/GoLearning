@@ -16,7 +16,7 @@ func main() {
 	defer conn.Close()
 
 	// 定义请求对象
-	request := &data.CalculatorRequest{2, 5}
+	request := &data.CalculatorRequest{Left: 2, Right: 5}
 
 	// 定义响应对象
 	response := &data.CalculatorResponse{}
