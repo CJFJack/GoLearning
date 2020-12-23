@@ -28,7 +28,7 @@ func main() {
 		ctx := make([]byte, 1024)
 		n, err := reader.Read(ctx)
 		if err == nil {
-			fmt.Printf("server: %s\n", string(ctx[:n]))
+			fmt.Printf("service: %s\n", string(ctx[:n]))
 		}
 	}
 }

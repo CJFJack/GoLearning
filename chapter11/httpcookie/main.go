@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -21,15 +22,22 @@ func ParseCookie(cookie string) map[string]string {
 
 func main() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		// 方式一：
 		// 解析cookie
 		cookie := ParseCookie(request.Header.Get("Cookie"))
-
-		// 设置Cookie
+		// 读取cookie value
 		counter := 0
 		if v, err := strconv.Atoi(cookie["counter"]); err == nil {
 			counter = v
 
 		}
+
+		// 方式二：
+		// 解析并读取cookie value
+		cookies, _ := request.Cookie("counter")
+		fmt.Printf("%T, %#v\n", cookies.Value, cookies.Value)
+
+		// 设置Cookie
 		counterCookie := &http.Cookie{
 			Name:     "counter",
 			Value:    strconv.Itoa(counter + 1),

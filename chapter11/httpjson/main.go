@@ -9,7 +9,6 @@ import (
 func main() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		//io.Copy(os.Stdout, request.Body)
-
 		var info map[string]interface{}
 		decoder := json.NewDecoder(request.Body)
 		decoder.Decode(&info)

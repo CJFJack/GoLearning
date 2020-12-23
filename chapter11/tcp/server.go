@@ -44,6 +44,8 @@ func main() {
 					}
 					log.Printf("接收到数据：%s\n", string(line))
 					// 回复数据
+					ackMsg := fmt.Sprintf("Over：%s\n", time.Now().Format(dateFormat))
+					conn.Write([]byte(ackMsg))
 					fmt.Fprintf(conn, "Over：%s\n", time.Now().Format(dateFormat))
 				}
 			}
