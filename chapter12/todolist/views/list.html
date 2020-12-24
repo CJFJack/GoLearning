@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>任务名称</th>
+            <th>状态</th>
+        </tr>
+        {{range.}}
+        <tr>
+            <td>{{.ID}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Status}}</td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>
