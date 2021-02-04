@@ -19,9 +19,9 @@ func main() {
 		fmt.Println(response.Header)
 	}
 
-	// post请求 application/json
+	// post请求 application/inputJson
 	//buffer := bytes.NewBufferString(`{"a": 1, "b":2}`)
-	//response, err = http.Post("http://localhost:8888", "application/json", buffer)
+	//response, err = http.Post("http://localhost:8888", "application/inputJson", buffer)
 	//fmt.Println(response.Proto, response.Status)
 	//fmt.Println(response.Body)
 	//fmt.Println(response.Header)

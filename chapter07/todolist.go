@@ -234,7 +234,7 @@ func readPassFile() string {
 }
 
 func jsonEncode(tasks []*Tasks) error {
-	file, err := os.OpenFile("tasks.json", os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
+	file, err := os.OpenFile("tasks.inputJson", os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
 	if err != nil {
 		return err
 	}

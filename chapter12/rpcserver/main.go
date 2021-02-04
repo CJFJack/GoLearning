@@ -6,14 +6,13 @@ import (
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"rpcserver/service"
-	"sync"
 )
 
 func main() {
 	addr := ":9999"
 
 	// 注册服务，未指定服务名称，默认为结构体名称
-	//rpc.Register(&service.Calculator{})
+	//rpc.Register(&services.Calculator{})
 	// 注册服务，指定服务名称
 	rpc.RegisterName("calc", &service.Calculator{})
 
@@ -25,23 +24,15 @@ func main() {
 	log.Printf("[+] listen on: %s", addr)
 
 	for {
-		wg := sync.WaitGroup{}
-		wg.Add(1)
-		// 使用例程
-		go func() {
-			conn, err := listener.Accept()
-			if err != nil {
-				log.Printf("[-]error client: %s\n", err.Error())
-				return
-			}
-			defer conn.Close()
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Printf("[-] error client: %s\n", err.Error())
+			continue
+		}
 
-			log.Printf("[+] client connected: %s\n", conn.RemoteAddr())
-			// 启动jsonrpc处理客户端请求
-			jsonrpc.ServeConn(conn)
-			wg.Done()
-		}()
-		wg.Wait()
+		log.Printf("[+] client connected: %s\n", conn.RemoteAddr())
+		// 使用例程启动jsonrpc处理客户端请求
+		go jsonrpc.ServeConn(conn)
 	}
 
 }

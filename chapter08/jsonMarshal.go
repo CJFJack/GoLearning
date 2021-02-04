@@ -43,7 +43,7 @@ func main() {
 	buffer := bytes.Buffer{}
 	json.Indent(&buffer, ctx, "", "    ")
 
-	file, _ := os.Create("task.json")
+	file, _ := os.Create("task.inputJson")
 	buffer.WriteTo(file)
 
 	jsonText, _ := json.MarshalIndent(tasks, "", "    ")

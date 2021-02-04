@@ -28,7 +28,7 @@ type Tasks struct {
 var (
 	toDoList   = []*Tasks{}
 	text       string
-	jsonPrefix = "tasks.json."
+	jsonPrefix = "tasks.inputJson."
 )
 
 const (

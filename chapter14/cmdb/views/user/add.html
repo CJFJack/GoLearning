@@ -1,0 +1,68 @@
+<form action="{{urlfor `UserController.Add`}}" method="POST">
+    <div class="form-group row">
+        <label class="col-form-label col-1">员工ID</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.StaffID}}" name="staff_id"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">用户名</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.Name}}" name="name"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">昵称</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.NickName}}" name="nick_name"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">密码</label>
+        <div class="col-6">
+            <input type="password" class="form-control" value="{{.form.Password}}" name="password"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">性别</label>
+        <div class="col-6">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender" value="1">
+                <label class="form-check-label" for="inlineRadio1">男</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender" value="0">
+                <label class="form-check-label" for="inlineRadio2">女</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">电话</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.Tel}}" name="tel"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">地址</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.Addr}}" name="addr"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">邮箱</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.Email}}" name="email"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-1">部门</label>
+        <div class="col-6">
+            <input type="text" class="form-control" value="{{.form.Department}}" name="department"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-8 offset-1">
+            <input type="submit" class="btn btn-info" value="提交"/>
+        </div>
+    </div>
+</form>

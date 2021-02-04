@@ -35,7 +35,7 @@ func main() {
 		},
 	}
 
-	file, _ := os.Create("task2.json")
+	file, _ := os.Create("task2.inputJson")
 	defer file.Close()
 
 	writer := bufio.NewWriter(file)

@@ -9,10 +9,10 @@ import (
 const TimeLayout = "2006-01-02 15:04:05"
 
 type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Password string `json:"-"`
-	Sex      bool   `json:"sex,string"`
+	ID       int    `inputJson:"id"`
+	Name     string `inputJson:"name"`
+	Password string `inputJson:"-"`
+	Sex      bool   `inputJson:"sex,string"`
 	Birthday Birthday
 }
 

@@ -18,7 +18,7 @@ type Task struct {
 
 func main() {
 	tasks := []Task{}
-	file, _ := os.Open("task2.json")
+	file, _ := os.Open("task2.inputJson")
 	defer file.Close()
 
 	reader := bufio.NewReader(file)

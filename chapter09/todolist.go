@@ -19,12 +19,12 @@ import (
 )
 
 var (
-	storeType = "json"
+	storeType = "inputJson"
 )
 
 const (
 	passSalt   = "61info"
-	jsonPrefix = "tasks.json."
+	jsonPrefix = "tasks.inputJson."
 	gobPrefix  = "tasks.gob."
 )
 
@@ -369,7 +369,7 @@ func CreateOrDeleteSaveFile(prefix string) string {
 
 func StoreDecode(storeType string) error {
 	switch storeType {
-	case "json":
+	case "inputJson":
 		var json Store = &Json{}
 		return json.Decode(&toDoList)
 	case "gob":
@@ -382,7 +382,7 @@ func StoreDecode(storeType string) error {
 
 func StoreEncode() error {
 	switch storeType {
-	case "json":
+	case "inputJson":
 		var json Store = &Json{}
 		return json.Encode(toDoList)
 	case "gob":

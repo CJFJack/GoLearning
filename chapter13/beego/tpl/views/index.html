@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<h4>index</h4>
+<div>{{.name}}</div>
+<div>{{if.body}}yes{{else}}no{{end}}</div>
+<div>
+    {{range .score}}
+        <div>{{.}}</div>
+    {{end}}
+    {{range $index, $value := .score}}
+        {{$index}} = {{$value}} <br>
+    {{end}}
+
+    {{range $key, $value := .users}}
+        {{$key}} : {{$value}} <br>
+    {{end}}
+    {{lower .content}}<br>
+
+    {{define "lower"}}
+        {{.|lower}}<br>
+    {{end}}
+
+    {{template "lower" .templateInTheHtml}}
+    {{template "lower" .templateInTheHtml}}
+    {{template "lower" .templateInTheHtml}}
+    {{template "lower" .templateInTheHtml}}
+
+    <br>
+    <span>template barfoo.html</span><br>
+    {{template "barfoo.html" .content}}
+    {{template "barfoo.html" .content}}
+    {{template "barfoo.html" .content}}
+    {{template "barfoo.html" .content}}
+</div>
+</body>
+</html>

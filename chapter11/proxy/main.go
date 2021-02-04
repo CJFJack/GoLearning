@@ -41,7 +41,7 @@ func main() {
 					}
 				}
 			}
-			http.Post(proxyUrl, "application/json", buffer)
+			http.Post(proxyUrl, "application/inputJson", buffer)
 		}
 	})
 

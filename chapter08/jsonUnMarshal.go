@@ -17,7 +17,7 @@ type Task struct {
 
 func main() {
 	tasks := []Task{}
-	jsonText, _ := ioutil.ReadFile("task.json")
+	jsonText, _ := ioutil.ReadFile("task.inputJson")
 
 	json.Unmarshal(jsonText, &tasks)
 

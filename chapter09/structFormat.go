@@ -26,7 +26,7 @@ type Config struct {
 	ServerId int
 	Port     int //端口号
 
-	Redis     *RedisConfig         `json:"redis" bson:"redis"`
+	Redis     *RedisConfig         `inputJson:"redis" bson:"redis"`
 	DbConfigs map[string]*DbConfig //如果配置多个数据库源，则用逗号分隔源的名字
 	callbacks []func()
 }

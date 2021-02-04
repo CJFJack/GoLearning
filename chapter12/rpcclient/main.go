@@ -24,9 +24,9 @@ func main() {
 	// 调用远程方法
 	// 同步调用
 	//err = conn.Call("Calculator.Add", request, response)
-	err = conn.Call("calc.Add", request, response)
+	//err = conn.Call("calc.Add", request, response)
 	// 获取结果
-	fmt.Println(err, response.Result)
+	//fmt.Println(err, response.Result)
 
 	// 异步调用
 	call := conn.Go("calc.Add", request, response, nil)

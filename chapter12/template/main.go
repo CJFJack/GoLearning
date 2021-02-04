@@ -30,4 +30,10 @@ func main() {
 	fmt.Printf("%s%s\n", strings.ToUpper(s[:1]), s[1:])
 	fmt.Printf("%T", s[0])
 
+	funcMap := template.FuncMap{
+		"datetime": func() {},
+	}
+
+	template.New("tpl").Funcs(funcMap).ParseFiles()
+
 }
