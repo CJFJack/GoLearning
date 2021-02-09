@@ -3,6 +3,7 @@ package controllers
 import (
 	"cmdb/base/controllers/base"
 	"cmdb/base/errors"
+	"cmdb/config"
 	"cmdb/forms"
 	"cmdb/services"
 	"fmt"
@@ -33,6 +34,7 @@ func (c *AuthController) Login() {
 	form := &forms.LoginForm{}
 	errs := errors.New()
 	if c.Ctx.Request.Method == "POST" {
+		config.Cache.Incr("login")
 		if err := c.ParseForm(form); err == nil {
 			user := services.UserService.GetByName(form.Name)
 			if user == nil {

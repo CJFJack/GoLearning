@@ -1,4 +1,5 @@
 <form action="{{urlfor `UserController.Add`}}" method="POST">
+    {{.xsrf_input}}
     <div class="form-group row">
         <label class="col-form-label col-1">员工ID</label>
         <div class="col-6">

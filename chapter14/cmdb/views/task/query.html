@@ -1,0 +1,51 @@
+<div class="row">
+    {{if .flash.notice}}
+        <div class="col-12 alert alert-success" role="alert">
+            {{.flash.notice}}
+        </div>
+    {{end}}
+    <div class="col-1">
+        <a href="{{urlfor `TaskController.Add`}}" class="btn btn-primary">新建</a>
+    </div>
+    <div class="col-11">
+        <form class="form-inline mb-2 float-right" action="{{urlfor `TaskController.Query`}}" method="GET">
+            <div class="form-group mr-2">
+                <label class="sr-only">查询:</label>
+                <input class="form-control" name="q" value="{{.q}}"/>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-outline-secondary" type="submit" value="查询"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-sm table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>任务名称</th>
+            <th>用户名</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>修改时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .tasks}}
+            <tr>
+                <td>{{.TaskName}}</td>
+                <td>{{.UserName}}</td>
+                <td>{{.StatusText}}</td>
+                <td>{{.CreatedAt}}</td>
+                <td>{{.UpdatedAt}}</td>
+                <td>
+                    <a class="btn btn-info btn-sm" href="{{urlfor `TaskController.Modify`}}?pk={{.ID}}">编辑</a>
+                    <a class="btn btn-danger btn-sm" href="{{urlfor `TaskController.Delete`}}?pk={{.ID}}">删除</a>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>

@@ -36,5 +36,6 @@ func (c *PasswordController) Modify() {
 	}
 	c.Data["xsrf_token"] = template.HTML(c.XSRFFormHTML())
 	c.Data["errors"] = errs
+	c.Data["title"] = "用户密码修改"
 	c.TplName = "password/modify.html"
 }

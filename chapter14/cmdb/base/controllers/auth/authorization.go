@@ -5,6 +5,7 @@ import (
 	"cmdb/models"
 	"cmdb/services"
 	"github.com/astaxie/beego"
+	"html/template"
 	"net/http"
 	"strings"
 )
@@ -33,6 +34,7 @@ func (c *AuthorizationController) Prepare() {
 			if user := services.UserService.GetByPk(pk); user != nil {
 				c.Data["loginUser"] = user
 				c.LoginUser = user
+				c.Data["xsrf_input"] = template.HTML(c.XSRFFormHTML())
 				return
 			}
 		}

@@ -5,6 +5,7 @@
     <title>{{.title}}</title>
     {{assets_css "/static/components/bootstrap-4.6.0/css/bootstrap.min.css"}}
     {{assets_css "/static/css/layout.css"}}
+    {{.SectionStyle}}
 </head>
 <body class="body">
 
@@ -17,5 +18,6 @@
         </div>
     </div>
 </div>
+{{.SectionScript}}
 </body>
 </html>

@@ -5,7 +5,6 @@ import (
 	"cmdb/forms"
 	"cmdb/services"
 	"github.com/astaxie/beego"
-	"html/template"
 	"net/http"
 )
 
@@ -19,7 +18,10 @@ func (c *UserController) Query() {
 	q := c.GetString("q")
 	c.Data["users"] = services.UserService.Query(q)
 	c.Data["q"] = q
+	c.Data["title"] = "用户查询"
 	c.TplName = "user/query.html"
+	c.LayoutSections["SectionStyle"] = "user/query_style.html"
+	c.LayoutSections["SectionScript"] = "user/query_script.html"
 }
 
 // 新增用户
@@ -56,9 +58,8 @@ func (c *UserController) Modify() {
 			form.Name = user.Name
 		}
 	}
-	c.Data["xsrf_input"] = template.HTML(c.XSRFFormHTML())
-	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["form"] = form
+	c.Data["title"] = "用户编辑"
 	c.TplName = "user/modify.html"
 }
 

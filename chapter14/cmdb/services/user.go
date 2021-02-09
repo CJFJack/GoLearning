@@ -19,16 +19,34 @@ func (s *userService) GetByPk(pk int) *models.User {
 		return user
 	}
 	return nil
-
 }
 
 // 新增用户
 func (s *userService) Add(form *forms.UserAddForm) {
 	ormer := orm.NewOrm()
+	if user := s.GetByName(form.Name); user != nil {
+		user.StaffID = form.StaffID
+		user.Deleted = 0
+		user.Status = 0
+		user.NickName = form.NickName
+		user.Password = utils.GeneratePassword(form.Password)
+		user.Gender = form.Gender
+		user.Tel = form.Tel
+		user.Email = form.Email
+		user.Department = form.Department
+		ormer.Update(user, "Deleted", "Status", "StaffID", "NickName", "Password", "Gender", "Tel", "Email", "Department")
+		return
+	}
 	user := &models.User{
-		StaffID:  form.StaffID,
-		Name:     form.Name,
-		NickName: form.NickName,
+		StaffID:    form.StaffID,
+		Name:       form.Name,
+		NickName:   form.NickName,
+		Password:   utils.GeneratePassword(form.Password),
+		Gender:     form.Gender,
+		Tel:        form.Tel,
+		Email:      form.Email,
+		Department: form.Department,
+		Status:     0,
 	}
 	ormer.ReadOrCreate(user, "Name")
 }

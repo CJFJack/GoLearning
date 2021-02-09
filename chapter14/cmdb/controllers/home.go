@@ -9,5 +9,6 @@ type HomeController struct {
 }
 
 func (c *HomeController) Index() {
+	c.Data["title"] = "首页"
 	c.TplName = "home/index.html"
 }

@@ -10,7 +10,7 @@ type UserModifyForm struct {
 type UserAddForm struct {
 	StaffID    string `form:"staff_id"`
 	Name       string `form:"name"`
-	NickName   string `form:"mick_name"`
+	NickName   string `form:"nick_name"`
 	Password   string `form:"password"`
 	Gender     int    `form:"gender"`
 	Tel        string `form:"tel"`
